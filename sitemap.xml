@@ -2,7 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://tyz-own.github.io/tags/os/</loc>
+    <lastmod>2024-05-23T21:13:45+08:00</lastmod>
+  </url><url>
+    <loc>https://tyz-own.github.io/posts/pinunpin/</loc>
+    <lastmod>2024-05-23T21:13:45+08:00</lastmod>
+  </url><url>
     <loc>https://tyz-own.github.io/posts/</loc>
+    <lastmod>2024-05-23T21:13:45+08:00</lastmod>
+  </url><url>
+    <loc>https://tyz-own.github.io/tags/rust/</loc>
+    <lastmod>2024-05-23T21:13:45+08:00</lastmod>
+  </url><url>
+    <loc>https://tyz-own.github.io/tags/</loc>
     <lastmod>2024-05-23T21:13:45+08:00</lastmod>
   </url><url>
     <loc>https://tyz-own.github.io/</loc>
@@ -12,9 +24,6 @@
     <lastmod>2024-05-23T11:53:29+08:00</lastmod>
   </url><url>
     <loc>https://tyz-own.github.io/tags/rcore/</loc>
-    <lastmod>2024-05-23T11:53:29+08:00</lastmod>
-  </url><url>
-    <loc>https://tyz-own.github.io/tags/</loc>
     <lastmod>2024-05-23T11:53:29+08:00</lastmod>
   </url><url>
     <loc>https://tyz-own.github.io/categories/</loc>

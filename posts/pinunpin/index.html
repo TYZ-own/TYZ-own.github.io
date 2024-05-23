@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Pin? Unpin? // TYZ</title>
+    <link rel="shortcut icon" href="/T.png" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.126.1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Tyz" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.4743f052c32dac5ef397f32c14bda832463022dc1f4b64e6f4bebd125456947c.css" />
+    
+
+    
+  
+
+
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Pin? Unpin?">
+  <meta name="twitter:description" content="gpt 解释： 在 Rust 中，Pin&lt;Box&lt;T&gt;&gt; 和 Pin&lt;&amp;mut T&gt; 类型的实例可以用于异步编程中的 Future。这是因为在异步编程中，通常需要确保将异步任务钉住（pin）在内存中，以防止其移动。而 Pin 类型就是为了实现这种钉住的功能而设计的。
+同时，这两种类型的实例会自动实现 Unpin trait 。Unpin trait 是 Rust 中的一个特殊 trait，它标识了类型在异步上下文中可以安全地被移动。因为 Pin 类型的实例在钉住后不能移动，所以它们的实例默认是不可移动的，因此自动实现了 Unpin trait。
+这意味着，尽管在异步上下文中使用了 Pin 类型的实例，但由于它们自动实现了 Unpin trait，所以在必要时，编译器会自动为它们生成合适的代码，以确保它们在异步任务中的移动是安全的。这简化了异步编程中的类型处理，并提供了更好的类型安全性。
+个人理解： 以下内容摘自RUST圣经：
+将固定住的 Future 变为 Unpin 之前的章节我们有提到 async 函数返回的 Future 默认就是 !Unpin 的。
+但是，在实际应用中，一些函数会要求它们处理的 Future 是 Unpin 的，此时，若你使用的 Future 是 !Unpin 的，必须要使用以下的方法先将 Future 进行固定:
+Box::pin， 创建一个 Pin&lt;Box&lt;T&gt;&gt; pin_utils::pin_mut!， 创建一个 Pin&lt;&amp;mut T&gt; 固定后获得的 Pin&lt;Box&lt;T&gt;&gt; 和 Pin&lt;&amp;mut T&gt; 既可以用于 Future ，又会自动实现 Unpin。">
+
+    <meta property="og:url" content="https://tyz-own.github.io/posts/pinunpin/">
+  <meta property="og:site_name" content="TYZ">
+  <meta property="og:title" content="Pin? Unpin?">
+  <meta property="og:description" content="gpt 解释： 在 Rust 中，Pin&lt;Box&lt;T&gt;&gt; 和 Pin&lt;&amp;mut T&gt; 类型的实例可以用于异步编程中的 Future。这是因为在异步编程中，通常需要确保将异步任务钉住（pin）在内存中，以防止其移动。而 Pin 类型就是为了实现这种钉住的功能而设计的。
+同时，这两种类型的实例会自动实现 Unpin trait 。Unpin trait 是 Rust 中的一个特殊 trait，它标识了类型在异步上下文中可以安全地被移动。因为 Pin 类型的实例在钉住后不能移动，所以它们的实例默认是不可移动的，因此自动实现了 Unpin trait。
+这意味着，尽管在异步上下文中使用了 Pin 类型的实例，但由于它们自动实现了 Unpin trait，所以在必要时，编译器会自动为它们生成合适的代码，以确保它们在异步任务中的移动是安全的。这简化了异步编程中的类型处理，并提供了更好的类型安全性。
+个人理解： 以下内容摘自RUST圣经：
+将固定住的 Future 变为 Unpin 之前的章节我们有提到 async 函数返回的 Future 默认就是 !Unpin 的。
+但是，在实际应用中，一些函数会要求它们处理的 Future 是 Unpin 的，此时，若你使用的 Future 是 !Unpin 的，必须要使用以下的方法先将 Future 进行固定:
+Box::pin， 创建一个 Pin&lt;Box&lt;T&gt;&gt; pin_utils::pin_mut!， 创建一个 Pin&lt;&amp;mut T&gt; 固定后获得的 Pin&lt;Box&lt;T&gt;&gt; 和 Pin&lt;&amp;mut T&gt; 既可以用于 Future ，又会自动实现 Unpin。">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-05-23T21:13:45+08:00">
+    <meta property="article:modified_time" content="2024-05-23T21:13:45+08:00">
+    <meta property="article:tag" content="Rust">
+    <meta property="article:tag" content="Os">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://tyz-own.github.io/"><img class="app-header-avatar" src="/Tyz.jpg" alt="Tyz" /></a>
+      <span class="app-header-title">TYZ</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/tags/">Tags</a>
+      </nav>
+      <p>Tyz&#39;s Blog</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/tyz-own" target="_blank" rel="noreferrer noopener me">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>My Github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Pin? Unpin?</h1>
+      <div class="post-meta">
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          May 23, 2024
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          1 min read
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tag">
+  <title>tag</title>
+  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
+</svg>
+              <a class="tag" href="https://tyz-own.github.io/tags/rust/">Rust</a>
+              <a class="tag" href="https://tyz-own.github.io/tags/os/">Os</a>
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h3 id="gpt-解释">gpt 解释：</h3>
+<p>在 Rust 中，<code>Pin&lt;Box&lt;T&gt;&gt;</code> 和 <code>Pin&lt;&amp;mut T&gt;</code> 类型的实例可以用于异步编程中的 Future。这是因为在异步编程中，通常需要确保将异步任务钉住（pin）在内存中，以防止其移动。而 <code>Pin</code> 类型就是为了实现这种钉住的功能而设计的。</p>
+<p>同时，这两种类型的实例会自动实现 <code>Unpin trait</code> 。<code>Unpin trait</code> 是 Rust 中的一个特殊 trait，它标识了类型在异步上下文中可以安全地被移动。因为 <code>Pin</code> 类型的实例在钉住后不能移动，所以它们的实例默认是不可移动的，因此自动实现了 <code>Unpin trait</code>。</p>
+<p>这意味着，尽管在异步上下文中使用了 <code>Pin</code> 类型的实例，但由于它们自动实现了 <code>Unpin trait</code>，所以在必要时，编译器会自动为它们生成合适的代码，以确保它们在异步任务中的移动是安全的。这简化了异步编程中的类型处理，并提供了更好的类型安全性。</p>
+<h3 id="个人理解">个人理解：</h3>
+<p>以下内容摘自<a href="https://course.rs/advance/async/pin-unpin.html#%E5%B0%86%E5%9B%BA%E5%AE%9A%E4%BD%8F%E7%9A%84-future-%E5%8F%98%E4%B8%BA-unpin">RUST圣经</a>：</p>
+<p>将固定住的 <code>Future</code> 变为 <code>Unpin</code>
+之前的章节我们有提到 <code>async</code> 函数返回的 <code>Future</code> 默认就是 <code>!Unpin</code> 的。</p>
+<p>但是，在实际应用中，一些函数会要求它们处理的 <code>Future</code> 是 <code>Unpin</code> 的，此时，若你使用的 <code>Future</code> 是 <code>!Unpin</code> 的，必须要使用以下的方法先将 <code>Future</code> 进行固定:</p>
+<p><code>Box::pin</code>， 创建一个 <code>Pin&lt;Box&lt;T&gt;&gt;</code>
+<code>pin_utils::pin_mut!</code>， 创建一个 <code>Pin&lt;&amp;mut T&gt;</code>
+固定后获得的 <code>Pin&lt;Box&lt;T&gt;&gt;</code> 和 <code>Pin&lt;&amp;mut T&gt;</code> 既可以用于 <code>Future</code> ，又会自动实现 <code>Unpin</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> pin_utils::pin_mut; <span style="color:#75715e">// `pin_utils` 可以在crates.io中找到
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 函数的参数是一个`Future`，但是要求该`Future`实现`Unpin`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">execute_unpin_future</span>(x: <span style="color:#a6e22e">impl</span> Future<span style="color:#f92672">&lt;</span>Output <span style="color:#f92672">=</span> ()<span style="color:#f92672">&gt;</span> <span style="color:#f92672">+</span> Unpin) { <span style="color:#75715e">/* ... */</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> fut <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> { <span style="color:#75715e">/* ... */</span> };
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 下面代码报错: 默认情况下，`fut` 实现的是`!Unpin`，并没有实现`Unpin`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// execute_unpin_future(fut);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 使用`Box`进行固定
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> fut <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> { <span style="color:#75715e">/* ... */</span> };
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> fut <span style="color:#f92672">=</span> Box::pin(fut);
+</span></span><span style="display:flex;"><span>execute_unpin_future(fut); <span style="color:#75715e">// OK
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 使用`pin_mut!`进行固定
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> fut <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> { <span style="color:#75715e">/* ... */</span> };
+</span></span><span style="display:flex;"><span>pin_mut!(fut);
+</span></span><span style="display:flex;"><span>execute_unpin_future(fut); <span style="color:#75715e">// OK
+</span></span></span></code></pre></div><p>个人理解：</p>
+<p>在这里，<code>Pin</code> 是一个包装着 <strong>不可移动类型的指针</strong> ( eg: <code>Box</code>) 的类型 ，被 <code>Pin</code> 中指针包装的类型不能被移动， 但 <code>Pin</code> 的指针可以被移动和使用。</p>
+<h3 id="参考">参考：</h3>
+<p><a href="https://course.rs/advance/async/pin-unpin.html#%E5%B0%86%E5%9B%BA%E5%AE%9A%E4%BD%8F%E7%9A%84-future-%E5%8F%98%E4%B8%BA-unpin">RUST圣经</a></p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
