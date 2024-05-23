@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>TYZ</title>
-    <link>https://tyz-own.github.io/</link>
-    <description>Recent content on TYZ</description>
+    <title>Rcore on TYZ</title>
+    <link>https://tyz-own.github.io/tags/rcore/</link>
+    <description>Recent content in Rcore on TYZ</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 23 May 2024 11:53:29 +0800</lastBuildDate>
-    <atom:link href="https://tyz-own.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://tyz-own.github.io/tags/rcore/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>First</title>
       <link>https://tyz-own.github.io/posts/first/</link>
