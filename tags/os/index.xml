@@ -6,8 +6,15 @@
     <description>Recent content in Os on TYZ</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 May 2024 21:13:45 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 24 May 2024 15:29:49 +0800</lastBuildDate>
     <atom:link href="https://tyz-own.github.io/tags/os/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RustFutures</title>
+      <link>https://tyz-own.github.io/posts/rustfutures1/</link>
+      <pubDate>Fri, 24 May 2024 15:29:49 +0800</pubDate>
+      <guid>https://tyz-own.github.io/posts/rustfutures1/</guid>
+      <description>RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES&#xA;RUST圣经&#xA;绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：&#xA;use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; const MAX_THREADS: usize = 4; static mut RUNTIME: *mut Runtime = std::ptr::NonNull::dangling().as_ptr(); pub struct Runtime { threads: Vec&amp;lt;Thread&amp;gt;, current: usize, } impl std::fmt::Display for Runtime { fn fmt(&amp;amp;self, f: &amp;amp;mut std::fmt::Formatter&amp;lt;&amp;#39;_&amp;gt;) -&amp;gt; std::fmt::Result { write!(f, &amp;#34;Runtime {{ current: {} ;\n&amp;#34;, self.current); for (index, my_struct) in self.</description>
+    </item>
     <item>
       <title>Pin? Unpin?</title>
       <link>https://tyz-own.github.io/posts/pinunpin/</link>

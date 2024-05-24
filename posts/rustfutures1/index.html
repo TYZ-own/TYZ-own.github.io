@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>RustFutures // TYZ</title>
+    <link rel="shortcut icon" href="/T.png" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.126.1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Tyz" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.4743f052c32dac5ef397f32c14bda832463022dc1f4b64e6f4bebd125456947c.css" />
+    
+
+    
+  
+
+
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="RustFutures">
+  <meta name="twitter:description" content="RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES
+RUST圣经
+绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：
+use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; const MAX_THREADS: usize = 4; static mut RUNTIME: *mut Runtime = std::ptr::NonNull::dangling().as_ptr(); pub struct Runtime { threads: Vec&lt;Thread&gt;, current: usize, } impl std::fmt::Display for Runtime { fn fmt(&amp;self, f: &amp;mut std::fmt::Formatter&lt;&#39;_&gt;) -&gt; std::fmt::Result { write!(f, &#34;Runtime {{ current: {} ;\n&#34;, self.current); for (index, my_struct) in self.">
+
+    <meta property="og:url" content="https://tyz-own.github.io/posts/rustfutures1/">
+  <meta property="og:site_name" content="TYZ">
+  <meta property="og:title" content="RustFutures">
+  <meta property="og:description" content="RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES
+RUST圣经
+绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：
+use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; const MAX_THREADS: usize = 4; static mut RUNTIME: *mut Runtime = std::ptr::NonNull::dangling().as_ptr(); pub struct Runtime { threads: Vec&lt;Thread&gt;, current: usize, } impl std::fmt::Display for Runtime { fn fmt(&amp;self, f: &amp;mut std::fmt::Formatter&lt;&#39;_&gt;) -&gt; std::fmt::Result { write!(f, &#34;Runtime {{ current: {} ;\n&#34;, self.current); for (index, my_struct) in self.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-05-24T15:29:49+08:00">
+    <meta property="article:modified_time" content="2024-05-24T15:29:49+08:00">
+    <meta property="article:tag" content="Rust">
+    <meta property="article:tag" content="Os">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://tyz-own.github.io/"><img class="app-header-avatar" src="/Tyz.jpg" alt="Tyz" /></a>
+      <span class="app-header-title">TYZ</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/tags/">Tags</a>
+      </nav>
+      <p>Tyz&#39;s Blog</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/tyz-own" target="_blank" rel="noreferrer noopener me">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>My Github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">RustFutures</h1>
+      <div class="post-meta">
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          May 24, 2024
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          6 min read
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tag">
+  <title>tag</title>
+  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
+</svg>
+              <a class="tag" href="https://tyz-own.github.io/tags/rust/">Rust</a>
+              <a class="tag" href="https://tyz-own.github.io/tags/os/">Os</a>
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h1 id="rust-futures-week1">RUST FUTURES-Week1</h1>
+<h2 id="参考文章">参考文章</h2>
+<p><a href="https://stevenbai.top/rust/futures_explained_in_200_lines_of_rust/#%E8%BF%99%E6%9C%AC%E4%B9%A6%E6%B6%B5%E7%9B%96%E7%9A%84%E5%86%85%E5%AE%B9">200行代码讲透RUST FUTURES</a></p>
+<p><a href="https://course.rs/advance/async/pin-unpin.html#%E5%B0%86%E5%9B%BA%E5%AE%9A%E4%BD%8F%E7%9A%84-future-%E5%8F%98%E4%B8%BA-unpin">RUST圣经</a></p>
+<h2 id="绿色线程green-threads">绿色线程(Green Threads)</h2>
+<h3 id="代码">代码</h3>
+<p>原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> std::ptr;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> std::fmt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">DEFAULT_STACK_SIZE</span>: <span style="color:#66d9ef">usize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1024</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1024</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">MAX_THREADS</span>: <span style="color:#66d9ef">usize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">mut</span> <span style="color:#66d9ef">RUNTIME</span>: <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> Runtime <span style="color:#f92672">=</span> std::ptr::NonNull::dangling().as_ptr();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Runtime</span> {
+</span></span><span style="display:flex;"><span>    threads: Vec<span style="color:#f92672">&lt;</span>Thread<span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>    current: <span style="color:#66d9ef">usize</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> std::fmt::Display <span style="color:#66d9ef">for</span> Runtime {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self, f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> std::fmt::Formatter<span style="color:#f92672">&lt;</span>&#39;_<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">std</span>::fmt::Result {
+</span></span><span style="display:flex;"><span>        write!(f, <span style="color:#e6db74">&#34;Runtime {{ current: {} ;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, self.current);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (index, my_struct) <span style="color:#66d9ef">in</span> self.threads.iter().enumerate() {
+</span></span><span style="display:flex;"><span>            write!(f, <span style="color:#e6db74">&#34;  {}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, my_struct)<span style="color:#f92672">?</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        write!(f, <span style="color:#e6db74">&#34;}}&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(PartialEq, Eq, Debug)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">State</span> {
+</span></span><span style="display:flex;"><span>    Available,
+</span></span><span style="display:flex;"><span>    Running,
+</span></span><span style="display:flex;"><span>    Ready,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> fmt::Display <span style="color:#66d9ef">for</span> State {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self, f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> fmt::Formatter<span style="color:#f92672">&lt;</span>&#39;_<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">fmt</span>::Result {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">match</span> self {
+</span></span><span style="display:flex;"><span>            State::Available <span style="color:#f92672">=&gt;</span> write!(f, <span style="color:#e6db74">&#34;Available&#34;</span>),
+</span></span><span style="display:flex;"><span>            State::Running <span style="color:#f92672">=&gt;</span> write!(f, <span style="color:#e6db74">&#34;Running&#34;</span>),
+</span></span><span style="display:flex;"><span>            State::Ready <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>                write!(f, <span style="color:#e6db74">&#34;Ready&#34;</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Thread</span> {
+</span></span><span style="display:flex;"><span>    id: <span style="color:#66d9ef">usize</span>,
+</span></span><span style="display:flex;"><span>    stack: Vec<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u8</span><span style="color:#f92672">&gt;</span>,
+</span></span><span style="display:flex;"><span>    ctx: <span style="color:#a6e22e">ThreadContext</span>,
+</span></span><span style="display:flex;"><span>    state: <span style="color:#a6e22e">State</span>,
+</span></span><span style="display:flex;"><span>    task: Option<span style="color:#f92672">&lt;</span>Box<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">dyn</span> Fn()<span style="color:#f92672">&gt;&gt;</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(Debug, Default)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[repr(C)]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">ThreadContext</span> {
+</span></span><span style="display:flex;"><span>    rsp: <span style="color:#66d9ef">u64</span>,
+</span></span><span style="display:flex;"><span>    r15: <span style="color:#66d9ef">u64</span>,
+</span></span><span style="display:flex;"><span>    r14: <span style="color:#66d9ef">u64</span>,
+</span></span><span style="display:flex;"><span>    r13: <span style="color:#66d9ef">u64</span>,
+</span></span><span style="display:flex;"><span>    r12: <span style="color:#66d9ef">u64</span>,
+</span></span><span style="display:flex;"><span>    rbx: <span style="color:#66d9ef">u64</span>,
+</span></span><span style="display:flex;"><span>    rbp: <span style="color:#66d9ef">u64</span>,
+</span></span><span style="display:flex;"><span>    thread_ptr: <span style="color:#66d9ef">u64</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> Thread {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">new</span>(id: <span style="color:#66d9ef">usize</span>) -&gt; <span style="color:#a6e22e">Self</span> {
+</span></span><span style="display:flex;"><span>        Thread {
+</span></span><span style="display:flex;"><span>            id,
+</span></span><span style="display:flex;"><span>            stack: <span style="color:#a6e22e">vec</span><span style="color:#f92672">!</span>[<span style="color:#ae81ff">0_</span><span style="color:#66d9ef">u8</span>; <span style="color:#66d9ef">DEFAULT_STACK_SIZE</span>],
+</span></span><span style="display:flex;"><span>            ctx: <span style="color:#a6e22e">ThreadContext</span>::default(),
+</span></span><span style="display:flex;"><span>            state: <span style="color:#a6e22e">State</span>::Available,
+</span></span><span style="display:flex;"><span>            task: None,
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> std::fmt::Display <span style="color:#66d9ef">for</span> Thread {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self, f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> std::fmt::Formatter<span style="color:#f92672">&lt;</span>&#39;_<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">std</span>::fmt::Result {
+</span></span><span style="display:flex;"><span>        write!(f, <span style="color:#e6db74">&#34;Thread {{id: {},  state: {} ,  ctx: {:?}}}&#34;</span>, self.id,  self.state, self.ctx)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> Runtime {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#[allow(clippy::new_without_default)]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">new</span>() -&gt; <span style="color:#a6e22e">Self</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> base_thread <span style="color:#f92672">=</span> Thread {
+</span></span><span style="display:flex;"><span>            id: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>            stack: <span style="color:#a6e22e">vec</span><span style="color:#f92672">!</span>[<span style="color:#ae81ff">0_</span><span style="color:#66d9ef">u8</span>; <span style="color:#66d9ef">DEFAULT_STACK_SIZE</span>],
+</span></span><span style="display:flex;"><span>            ctx: <span style="color:#a6e22e">ThreadContext</span>::default(),
+</span></span><span style="display:flex;"><span>            state: <span style="color:#a6e22e">State</span>::Running,
+</span></span><span style="display:flex;"><span>            task: None,
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> threads <span style="color:#f92672">=</span> vec![base_thread];
+</span></span><span style="display:flex;"><span>        threads[<span style="color:#ae81ff">0</span>].ctx.thread_ptr <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>threads[<span style="color:#ae81ff">0</span>] <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">const</span> Thread <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> available_threads: Vec<span style="color:#f92672">&lt;</span>Thread<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">..</span><span style="color:#66d9ef">MAX_THREADS</span>).map(Thread::new).collect();
+</span></span><span style="display:flex;"><span>        threads.append(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> available_threads);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Runtime {
+</span></span><span style="display:flex;"><span>            threads,
+</span></span><span style="display:flex;"><span>            current: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">init</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">unsafe</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> r_ptr: <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> Runtime <span style="color:#f92672">=</span> self;
+</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;RUNTIME has been initialized</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">RUNTIME</span> <span style="color:#f92672">=</span> r_ptr;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">run</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; <span style="color:#f92672">!</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> self.t_yield() {}
+</span></span><span style="display:flex;"><span>        std::process::exit(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">t_return</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self.current <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>            self.threads[self.current].state <span style="color:#f92672">=</span> State::Available;
+</span></span><span style="display:flex;"><span>            self.t_yield();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">t_yield</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> pos <span style="color:#f92672">=</span> self.current;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> self.threads[pos].state <span style="color:#f92672">!=</span> State::Ready {
+</span></span><span style="display:flex;"><span>            pos <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> pos <span style="color:#f92672">==</span> self.threads.len() {
+</span></span><span style="display:flex;"><span>                pos <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> pos <span style="color:#f92672">==</span> self.current {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self.threads[self.current].state <span style="color:#f92672">!=</span> State::Available {
+</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>self);
+</span></span><span style="display:flex;"><span>            self.threads[self.current].state <span style="color:#f92672">=</span> State::Ready;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self.threads[pos].state <span style="color:#f92672">=</span> State::Running;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> old_pos <span style="color:#f92672">=</span> self.current;
+</span></span><span style="display:flex;"><span>        self.current <span style="color:#f92672">=</span> pos;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        println!(
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;[current pos=</span><span style="color:#e6db74">{pos}</span><span style="color:#e6db74"> old_pos=</span><span style="color:#e6db74">{old_pos}</span><span style="color:#e6db74"> len=</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">] switch&#34;</span>,
+</span></span><span style="display:flex;"><span>            self.threads.len()
+</span></span><span style="display:flex;"><span>        );
+</span></span><span style="display:flex;"><span>        println!(
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;old.ctx=</span><span style="color:#e6db74">{:p}</span><span style="color:#e6db74"> current.cxt=</span><span style="color:#e6db74">{:p}</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&amp;</span>self.threads[old_pos].ctx, <span style="color:#f92672">&amp;</span>self.threads[pos].ctx
+</span></span><span style="display:flex;"><span>        );
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">unsafe</span> {
+</span></span><span style="display:flex;"><span>            __switch(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self.threads[old_pos].ctx, <span style="color:#f92672">&amp;</span>self.threads[pos].ctx);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">spawn</span><span style="color:#f92672">&lt;</span>F: Fn() <span style="color:#f92672">+</span> &#39;static<span style="color:#f92672">&gt;</span>(f: <span style="color:#a6e22e">F</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">unsafe</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> rt_ptr <span style="color:#f92672">=</span> <span style="color:#66d9ef">RUNTIME</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> available <span style="color:#f92672">=</span> (<span style="color:#f92672">*</span>rt_ptr)
+</span></span><span style="display:flex;"><span>                .threads
+</span></span><span style="display:flex;"><span>                .iter_mut()
+</span></span><span style="display:flex;"><span>                .find(<span style="color:#f92672">|</span>t<span style="color:#f92672">|</span> t.state <span style="color:#f92672">==</span> State::Available)
+</span></span><span style="display:flex;"><span>                .expect(<span style="color:#e6db74">&#34;no available thread.&#34;</span>);
+</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;spawn use RUNTIME to find available thread&#34;</span>);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> size <span style="color:#f92672">=</span> available.stack.len();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> s_ptr <span style="color:#f92672">=</span> available.stack.as_mut_ptr();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> s_ptr <span style="color:#f92672">=</span> s_ptr.add(size);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> s_ptr <span style="color:#f92672">=</span> s_ptr <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span> <span style="color:#f92672">&amp;</span> <span style="color:#f92672">!</span><span style="color:#ae81ff">0xf</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> s_ptr <span style="color:#f92672">=</span> s_ptr <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> <span style="color:#66d9ef">u8</span>;
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 这俩都得对齐
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            ptr::write_unaligned(s_ptr.sub(<span style="color:#ae81ff">16</span>).cast::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u64</span><span style="color:#f92672">&gt;</span>(), guard <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">usize</span> <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>);
+</span></span><span style="display:flex;"><span>            ptr::write_unaligned(s_ptr.sub(<span style="color:#ae81ff">32</span>) <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> <span style="color:#66d9ef">u64</span>, __call <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">usize</span> <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>);
+</span></span><span style="display:flex;"><span>            available.ctx.rsp <span style="color:#f92672">=</span> s_ptr.sub(<span style="color:#ae81ff">32</span>) <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>;
+</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;available.ctx.rsp = </span><span style="color:#e6db74">{:x}</span><span style="color:#e6db74">&#34;</span>, available.ctx.rsp);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            available.task <span style="color:#f92672">=</span> Some(Box::new(f));
+</span></span><span style="display:flex;"><span>            available.ctx.thread_ptr <span style="color:#f92672">=</span> available <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">const</span> Thread <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>;
+</span></span><span style="display:flex;"><span>            available.state <span style="color:#f92672">=</span> State::Ready;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 因为guard是对齐的，这里ret的时候rsp也得对齐
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 这个用rust好像做不了吧
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">call</span>(thread: <span style="color:#66d9ef">u64</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> thread <span style="color:#f92672">=</span> <span style="color:#66d9ef">unsafe</span> { <span style="color:#f92672">&amp;*</span>(thread <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">const</span> Thread) };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> Some(f) <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>thread.task {
+</span></span><span style="display:flex;"><span>        f();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>std::arch::global_asm!(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;.globl __call&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;__call:&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  fn call(thread: u64) {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   subq    $0x28, %rsp&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movq    %rdi, 0x10(%rsp)&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  let thread = unsafe { &amp;*(thread as *const Thread) };
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   movq    %rdi, 0x18(%rsp)&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  if let Some(f) = &amp;thread.task {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   movq    %rdi, %rax&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   addq    $0x60, %rax&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movq    %rax, 0x8(%rsp)&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movq    0x60(%rdi), %rdx&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movl    $0x1, %eax&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   xorl    %ecx, %ecx&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   cmpq    $0x0, %rdx&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   cmoveq  %rcx, %rax&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   cmpq    $0x1, %rax&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   jne     0f&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movq    0x8(%rsp), %rdi&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//     if let Some(f) = &amp;thread.task {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   movq    %rdi, 0x20(%rsp)&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//         f();
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   movq   8(%rdi), %rdi&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   callq   *0x28(%rdi)&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;0: addq    $0x28, %rsp&#34;</span>,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 没错，这里要再加一个8，这样retq使用的就是栈中的那个guard
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   addq    $8, %rsp&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   retq&#34;</span>,
+</span></span><span style="display:flex;"><span>    options(att_syntax)
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">guard</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsafe</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> rt_ptr <span style="color:#f92672">=</span> <span style="color:#66d9ef">RUNTIME</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> rt <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> <span style="color:#f92672">*</span>rt_ptr;
+</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;THREAD </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> FINISHED.&#34;</span>, rt.threads[rt.current].id);
+</span></span><span style="display:flex;"><span>        rt.t_return();
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">yield_thread</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsafe</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> rt_ptr <span style="color:#f92672">=</span> <span style="color:#66d9ef">RUNTIME</span>;
+</span></span><span style="display:flex;"><span>        (<span style="color:#f92672">*</span>rt_ptr).t_yield();
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>std::arch::global_asm!(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">r</span><span style="color:#e6db74">#&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.globl __switch
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__switch:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x00], rsp
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x08], r15
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x10], r14
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x18], r13
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x20], r12
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x28], rbx
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x30], rbp
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  rsp, [rsi+0x00]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  r15, [rsi+0x08]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  r14, [rsi+0x10]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  r13, [rsi+0x18]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  r12, [rsi+0x20]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  rbx, [rsi+0x28]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  rbp, [rsi+0x30]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  rdi, [rsi+0x38]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  ret
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;#</span>
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">__switch</span>(old: <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> ThreadContext, new: <span style="color:#f92672">*</span><span style="color:#66d9ef">const</span> ThreadContext);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">__call</span>(thread: <span style="color:#66d9ef">u64</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#[cfg(not(windows))]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> runtime <span style="color:#f92672">=</span> Runtime::new();
+</span></span><span style="display:flex;"><span>    runtime.init();
+</span></span><span style="display:flex;"><span>    Runtime::spawn(<span style="color:#f92672">||</span> {
+</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;I haven&#39;t implemented a timer in this example.&#34;</span>);
+</span></span><span style="display:flex;"><span>        yield_thread();
+</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;Finally, notice how the tasks are executed concurrently.&#34;</span>);
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    Runtime::spawn(<span style="color:#f92672">||</span> {
+</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;But we can still nest tasks...&#34;</span>);
+</span></span><span style="display:flex;"><span>        Runtime::spawn(<span style="color:#f92672">||</span> {
+</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;...like this!&#34;</span>);
+</span></span><span style="display:flex;"><span>        })
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    runtime.run();
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;Hello, world!&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>都是佬们写的，我只是个搬运工，之前有个<code>ctx</code>没对齐导致打印<code>ctx</code>时会出现<code>segment fault</code>，现已解决，大家可放心食用。</p>
+<h2 id="基于回调">基于回调</h2>
+<p>基于回调的方法在编程中是一种常见的模式，尤其在处理异步操作时经常会用到。虽然在 JavaScript 中的回调地狱让人头痛，但在其他语言中，特别是像 Rust 这样的系统编程语言中，可以更好地管理回调。</p>
+<p>在 Rust 中，基于回调的方法通常通过闭包来实现。闭包是一种可以捕获其周围环境并在稍后执行的匿名函数。下面是一个简单的例子，展示了如何在 Rust 中使用基于回调的方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> std::collections::HashMap;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 定义一个保存回调函数的HashMap
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 键是字符串，值是一个闭包，它接受一个 i32 参数并返回一个 i32
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 这个闭包可以代表任何需要在以后执行的任务
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> callbacks: <span style="color:#a6e22e">HashMap</span><span style="color:#f92672">&lt;</span>String, Box<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">dyn</span> Fn(<span style="color:#66d9ef">i32</span>) -&gt; <span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;&gt;</span> <span style="color:#f92672">=</span> HashMap::new();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 添加一个回调函数到 HashMap 中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>callbacks.insert(<span style="color:#e6db74">&#34;double&#34;</span>.to_string(), Box::new(<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> x <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 定义一个函数，它接受一个回调函数的名称和一个参数，然后调用相应的回调函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">call_callback</span>(callback_name: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">str</span>, value: <span style="color:#66d9ef">i32</span>, callbacks: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">HashMap</span><span style="color:#f92672">&lt;</span>String, Box<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">dyn</span> Fn(<span style="color:#66d9ef">i32</span>) -&gt; <span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;&gt;</span>) -&gt; Option<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> Some(callback) <span style="color:#f92672">=</span> callbacks.get(callback_name) {
+</span></span><span style="display:flex;"><span>        Some(callback(value))
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        None
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 调用回调函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> Some(result) <span style="color:#f92672">=</span> call_callback(<span style="color:#e6db74">&#34;double&#34;</span>, <span style="color:#ae81ff">5</span>, <span style="color:#f92672">&amp;</span>callbacks) {
+</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;Result: </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span>, result); <span style="color:#75715e">// 输出结果：10
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>在这个例子中，我们首先定义了一个 <code>HashMap</code>，它的键是字符串，值是一个接受 i32 参数并返回 i32 的闭包。然后，我们向 <code>HashMap</code> 中添加了一个回调函数，名称为 <code>&quot;double&quot;</code>，它将参数乘以 2。最后，我们定义了一个函数 <code>call_callback</code>，它接受回调函数的<code>名称</code>、<code>参数</code>和 <code>HashMap</code>，并调用相应的回调函数。通过这种方式，我们可以实现基于回调的方法。</p>
+<h2 id="关于闭包">关于闭包</h2>
+<h3 id="闭包的基本语法">闭包的基本语法</h3>
+<p>在Rust中，闭包的语法使用竖线 | | 来定义参数列表，箭头 -&gt; 用于指定返回类型，大括号 { } 包含闭包的函数体。闭包的语法通常如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#f92672">|</span>param1, param2<span style="color:#f92672">|</span> -&gt; <span style="color:#a6e22e">ReturnType</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 闭包的函数体
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 可以使用捕获的环境变量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h3 id="闭包的三种形式">闭包的三种形式</h3>
+<p>在Rust中，闭包可以写成三种形式，分别是：</p>
+<ol>
+<li>
+<p><code>FnOnce</code>： 该闭包会获取它所捕获的变量的所有权（Ownership），并且只能被调用一次。通常用于消费被捕获变量的情况。</p>
+</li>
+<li>
+<p><code>FnMut</code>： 该闭包会获取它所捕获的变量的可变引用，并且可以被调用多次。通常用于修改被捕获变量的情况。</p>
+</li>
+<li>
+<p><code>Fn</code>： 该闭包会获取它所捕获的变量的不可变引用，并且可以被调用多次。通常用于不需要修改被捕获变量的情况。</p>
+</li>
+</ol>
+<h3 id="闭包实例">闭包实例</h3>
+<p>闭包的捕获环境
+闭包可以捕获其环境中的变量，这意味着闭包可以访问定义闭包时所在作用域中的变量。捕获的变量可以通过引用、可变引用或者所有权的方式进行访问。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">add_x</span> <span style="color:#f92672">=</span> <span style="color:#f92672">|</span><span style="color:#a6e22e">y</span><span style="color:#f92672">|</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">y</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">println</span><span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{}&#34;</span>, <span style="color:#a6e22e">add_x</span>(<span style="color:#ae81ff">5</span>)); <span style="color:#75715e">// 输出 15
+</span></span></span></code></pre></div><p>在这个例子中，闭包 add_x 捕获了变量 x，并将其与参数 y 相加。闭包可以自动推断捕获变量的引用类型。</p>
+<h2 id="从回调到承诺-promises">从回调到承诺 (promises)</h2>
+<p>promises 可视为一种状态机
+Promises 有三种状态：<code>pending</code> （进行中）、<code>fulfilled</code> （已完成）和<code>rejected</code> （已拒绝）。一旦状态从 <code>pending</code>  转变为 <code>fulfilled</code>  或<code> rejected</code> ，它就会停留在该状态，并执行相应的处理程序。</p>
+<p>承诺是解决回调带来的复杂性的一种方法。</p>
+<p><code>javascript</code> 回调</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">setTimer</span>(<span style="color:#ae81ff">200</span>, () =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">setTimer</span>(<span style="color:#ae81ff">100</span>, () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">setTimer</span>(<span style="color:#ae81ff">50</span>, () =&gt; {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;I&#39;m the last one&#34;</span>);
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p><code>javascript</code> 承诺</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">timer</span>(<span style="color:#a6e22e">ms</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Promise((<span style="color:#a6e22e">resolve</span>) =&gt; <span style="color:#a6e22e">setTimeout</span>(<span style="color:#a6e22e">resolve</span>, <span style="color:#a6e22e">ms</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">timer</span>(<span style="color:#ae81ff">200</span>)
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">then</span>(() =&gt; <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">timer</span>(<span style="color:#ae81ff">100</span>))
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">then</span>(() =&gt; <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">timer</span>(<span style="color:#ae81ff">50</span>))
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">then</span>(() =&gt; <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;I&#39;</span><span style="color:#a6e22e">m</span> <span style="color:#a6e22e">the</span> <span style="color:#a6e22e">last</span> <span style="color:#a6e22e">one</span>));
+</span></span></code></pre></div><p>rust 中的 <code>Future</code> 和其它语言中的 <code>Promise</code> 类似，但它们是异步的。</p>
+<h2 id="future">Future</h2>
+<p><a href="https://course.rs/advance/async/future-excuting.html#future-%E7%89%B9%E5%BE%81">Future 流程</a></p>
+<p>Future 是一种异步计算的结果，它代表了一个未来才会结束的计算。在 Rust 中，Future 是一种异步计算的抽象，它允许我们以一种统一的方式处理异步操作，而无需关心具体的实现细节。</p>
+<h3 id="future-流程">Future 流程</h3>
+<ol>
+<li><code>Spawner</code> 方法用于生成 <code>Future</code> , 然后将它放入 <strong>消息通道</strong> 中。</li>
+<li>执行器需要从 <strong>消息通道( channel )</strong> 中拉取事件，然后运行它们。当一个任务准备好后（可以继续执行），它会将自己放入消息通道中，然后等待执行器 <code>poll</code> 。</li>
+<li>若在当前 <code>poll</code> 中， <code>Future</code> 可以被完成，则会返回 <code>Poll::Ready(result)</code> ，反之则返回 <code>Poll::Pending</code>， 并且安排一个 <code>wake</code> 函数：</li>
+<li>当未来 <code>Future</code> 准备好进一步执行时， 该函数会被调用，然后将该 <code>Future</code> 送入 <strong>消息管道</strong> ，执行器从 <strong>消息管道</strong> 拉取 <code>Future</code>, 再次调用 <code>poll</code> 方法，此时 <code>Future</code> 就可以继续执行了。(进入步骤2)</li>
+</ol>
+<p><img src="image.png" alt="alt text"></p>
+<h3 id="关于-pin-和-unpin-的理解">关于 <code>Pin</code> 和 <code>Unpin</code> 的理解</h3>
+<h4 id="官方内容">官方内容：</h4>
+<p>将固定住的 <code>Future</code> 变为 <code>Unpin</code>
+之前的章节我们有提到 <code>async</code> 函数返回的 <code>Future</code> 默认就是 <code>!Unpin</code> 的。</p>
+<p>但是，在实际应用中，一些函数会要求它们处理的 <code>Future</code> 是 <code>Unpin</code> 的，此时，若你使用的 <code>Future</code> 是 <code>!Unpin</code> 的，必须要使用以下的方法先将 <code>Future</code> 进行固定:</p>
+<p><code>Box::pin</code>， 创建一个 <code>Pin&lt;Box&lt;T&gt;&gt;</code>
+<code>pin_utils::pin_mut!</code>， 创建一个 <code>Pin&lt;&amp;mut T&gt;</code>
+固定后获得的 <code>Pin&lt;Box&lt;T&gt;&gt;</code> 和 <code>Pin&lt;&amp;mut T&gt;</code> 既可以用于 <code>Future</code> ，又会自动实现 <code>Unpin</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> pin_utils::pin_mut; <span style="color:#75715e">// `pin_utils` 可以在crates.io中找到
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 函数的参数是一个`Future`，但是要求该`Future`实现`Unpin`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">execute_unpin_future</span>(x: <span style="color:#a6e22e">impl</span> Future<span style="color:#f92672">&lt;</span>Output <span style="color:#f92672">=</span> ()<span style="color:#f92672">&gt;</span> <span style="color:#f92672">+</span> Unpin) { <span style="color:#75715e">/* ... */</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> fut <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> { <span style="color:#75715e">/* ... */</span> };
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 下面代码报错: 默认情况下，`fut` 实现的是`!Unpin`，并没有实现`Unpin`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// execute_unpin_future(fut);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 使用`Box`进行固定
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> fut <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> { <span style="color:#75715e">/* ... */</span> };
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> fut <span style="color:#f92672">=</span> Box::pin(fut);
+</span></span><span style="display:flex;"><span>execute_unpin_future(fut); <span style="color:#75715e">// OK
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 使用`pin_mut!`进行固定
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> fut <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> { <span style="color:#75715e">/* ... */</span> };
+</span></span><span style="display:flex;"><span>pin_mut!(fut);
+</span></span><span style="display:flex;"><span>execute_unpin_future(fut); <span style="color:#75715e">// OK
+</span></span></span></code></pre></div><h4 id="个人理解">个人理解：</h4>
+<p>在这里，<code>Pin</code> 是一个包装着 <strong>不可移动类型的指针</strong> ( eg: <code>Box</code>) 的类型 ，被 <code>Pin</code> 中指针包装的类型不能被移动， 但 <code>Pin</code> 的指针可以被移动和使用。</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

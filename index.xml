@@ -6,21 +6,21 @@
     <description>Recent content on TYZ</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 May 2024 21:13:45 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 24 May 2024 15:29:49 +0800</lastBuildDate>
     <atom:link href="https://tyz-own.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RustFutures</title>
+      <link>https://tyz-own.github.io/posts/rustfutures1/</link>
+      <pubDate>Fri, 24 May 2024 15:29:49 +0800</pubDate>
+      <guid>https://tyz-own.github.io/posts/rustfutures1/</guid>
+      <description>RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES&#xA;RUST圣经&#xA;绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：&#xA;use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; const MAX_THREADS: usize = 4; static mut RUNTIME: *mut Runtime = std::ptr::NonNull::dangling().as_ptr(); pub struct Runtime { threads: Vec&amp;lt;Thread&amp;gt;, current: usize, } impl std::fmt::Display for Runtime { fn fmt(&amp;amp;self, f: &amp;amp;mut std::fmt::Formatter&amp;lt;&amp;#39;_&amp;gt;) -&amp;gt; std::fmt::Result { write!(f, &amp;#34;Runtime {{ current: {} ;\n&amp;#34;, self.current); for (index, my_struct) in self.</description>
+    </item>
     <item>
       <title>Pin? Unpin?</title>
       <link>https://tyz-own.github.io/posts/pinunpin/</link>
       <pubDate>Thu, 23 May 2024 21:13:45 +0800</pubDate>
       <guid>https://tyz-own.github.io/posts/pinunpin/</guid>
       <description>gpt 解释： 在 Rust 中，Pin&amp;lt;Box&amp;lt;T&amp;gt;&amp;gt; 和 Pin&amp;lt;&amp;amp;mut T&amp;gt; 类型的实例可以用于异步编程中的 Future。这是因为在异步编程中，通常需要确保将异步任务钉住（pin）在内存中，以防止其移动。而 Pin 类型就是为了实现这种钉住的功能而设计的。&#xA;同时，这两种类型的实例会自动实现 Unpin trait 。Unpin trait 是 Rust 中的一个特殊 trait，它标识了类型在异步上下文中可以安全地被移动。因为 Pin 类型的实例在钉住后不能移动，所以它们的实例默认是不可移动的，因此自动实现了 Unpin trait。&#xA;这意味着，尽管在异步上下文中使用了 Pin 类型的实例，但由于它们自动实现了 Unpin trait，所以在必要时，编译器会自动为它们生成合适的代码，以确保它们在异步任务中的移动是安全的。这简化了异步编程中的类型处理，并提供了更好的类型安全性。&#xA;个人理解： 以下内容摘自RUST圣经：&#xA;将固定住的 Future 变为 Unpin 之前的章节我们有提到 async 函数返回的 Future 默认就是 !Unpin 的。&#xA;但是，在实际应用中，一些函数会要求它们处理的 Future 是 Unpin 的，此时，若你使用的 Future 是 !Unpin 的，必须要使用以下的方法先将 Future 进行固定:&#xA;Box::pin， 创建一个 Pin&amp;lt;Box&amp;lt;T&amp;gt;&amp;gt; pin_utils::pin_mut!， 创建一个 Pin&amp;lt;&amp;amp;mut T&amp;gt; 固定后获得的 Pin&amp;lt;Box&amp;lt;T&amp;gt;&amp;gt; 和 Pin&amp;lt;&amp;amp;mut T&amp;gt; 既可以用于 Future ，又会自动实现 Unpin。</description>
-    </item>
-    <item>
-      <title>First</title>
-      <link>https://tyz-own.github.io/posts/first/</link>
-      <pubDate>Thu, 23 May 2024 11:53:29 +0800</pubDate>
-      <guid>https://tyz-own.github.io/posts/first/</guid>
-      <description>first blog there is nothing to see.</description>
     </item>
   </channel>
 </rss>
