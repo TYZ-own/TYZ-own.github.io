@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Tyz" />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="/css/main.min.4743f052c32dac5ef397f32c14bda832463022dc1f4b64e6f4bebd125456947c.css" />
+    <link rel="stylesheet" href="/css/main.min.e3e1b5ef4f19ce0b945b72db9c1b0f8695f2e58150b28a19816fb99686c92549.css" />
     
 
     
@@ -21,7 +21,11 @@
   <meta name="twitter:description" content="RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES
 RUST圣经
 绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：
-use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; const MAX_THREADS: usize = 4; static mut RUNTIME: *mut Runtime = std::ptr::NonNull::dangling().as_ptr(); pub struct Runtime { threads: Vec&lt;Thread&gt;, current: usize, } impl std::fmt::Display for Runtime { fn fmt(&amp;self, f: &amp;mut std::fmt::Formatter&lt;&#39;_&gt;) -&gt; std::fmt::Result { write!(f, &#34;Runtime {{ current: {} ;\n&#34;, self.current); for (index, my_struct) in self.">
+green threads.rs
+都是佬们写的，我只是个搬运工，之前有个ctx没对齐导致打印ctx时会出现segment fault，现已解决，大家可放心食用。
+基于回调 基于回调的方法在编程中是一种常见的模式，尤其在处理异步操作时经常会用到。虽然在 JavaScript 中的回调地狱让人头痛，但在其他语言中，特别是像 Rust 这样的系统编程语言中，可以更好地管理回调。
+在 Rust 中，基于回调的方法通常通过闭包来实现。闭包是一种可以捕获其周围环境并在稍后执行的匿名函数。下面是一个简单的例子，展示了如何在 Rust 中使用基于回调的方法：
+use std::collections::HashMap; // 定义一个保存回调函数的HashMap // 键是字符串，值是一个闭包，它接受一个 i32 参数并返回一个 i32 // 这个闭包可以代表任何需要在以后执行的任务 let mut callbacks: HashMap&lt;String, Box&lt;dyn Fn(i32) -&gt; i32&gt;&gt; = HashMap::new(); // 添加一个回调函数到 HashMap 中 callbacks.insert(&#34;double&#34;.to_string(), Box::new(|x| x * 2)); // 定义一个函数，它接受一个回调函数的名称和一个参数，然后调用相应的回调函数 fn call_callback(callback_name: &amp;str, value: i32, callbacks: &amp;HashMap&lt;String, Box&lt;dyn Fn(i32) -&gt; i32&gt;&gt;) -&gt; Option&lt;i32&gt; { if let Some(callback) = callbacks.">
 
     <meta property="og:url" content="https://tyz-own.github.io/posts/rustfutures1/">
   <meta property="og:site_name" content="TYZ">
@@ -29,7 +33,11 @@ use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; c
   <meta property="og:description" content="RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES
 RUST圣经
 绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：
-use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; const MAX_THREADS: usize = 4; static mut RUNTIME: *mut Runtime = std::ptr::NonNull::dangling().as_ptr(); pub struct Runtime { threads: Vec&lt;Thread&gt;, current: usize, } impl std::fmt::Display for Runtime { fn fmt(&amp;self, f: &amp;mut std::fmt::Formatter&lt;&#39;_&gt;) -&gt; std::fmt::Result { write!(f, &#34;Runtime {{ current: {} ;\n&#34;, self.current); for (index, my_struct) in self.">
+green threads.rs
+都是佬们写的，我只是个搬运工，之前有个ctx没对齐导致打印ctx时会出现segment fault，现已解决，大家可放心食用。
+基于回调 基于回调的方法在编程中是一种常见的模式，尤其在处理异步操作时经常会用到。虽然在 JavaScript 中的回调地狱让人头痛，但在其他语言中，特别是像 Rust 这样的系统编程语言中，可以更好地管理回调。
+在 Rust 中，基于回调的方法通常通过闭包来实现。闭包是一种可以捕获其周围环境并在稍后执行的匿名函数。下面是一个简单的例子，展示了如何在 Rust 中使用基于回调的方法：
+use std::collections::HashMap; // 定义一个保存回调函数的HashMap // 键是字符串，值是一个闭包，它接受一个 i32 参数并返回一个 i32 // 这个闭包可以代表任何需要在以后执行的任务 let mut callbacks: HashMap&lt;String, Box&lt;dyn Fn(i32) -&gt; i32&gt;&gt; = HashMap::new(); // 添加一个回调函数到 HashMap 中 callbacks.insert(&#34;double&#34;.to_string(), Box::new(|x| x * 2)); // 定义一个函数，它接受一个回调函数的名称和一个参数，然后调用相应的回调函数 fn call_callback(callback_name: &amp;str, value: i32, callbacks: &amp;HashMap&lt;String, Box&lt;dyn Fn(i32) -&gt; i32&gt;&gt;) -&gt; Option&lt;i32&gt; { if let Some(callback) = callbacks.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -77,7 +85,7 @@ use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; c
   <title>clock</title>
   <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
 </svg>
-          6 min read
+          2 min read
         </div>
         <div>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tag">
@@ -90,303 +98,15 @@ use std::ptr; use std::fmt; const DEFAULT_STACK_SIZE: usize = 1024 * 1024 * 2; c
       </div>
     </header>
     <div class="post-content">
-      <!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<h1 id="rust-futures-week1">RUST FUTURES-Week1</h1>
+      <h1 id="rust-futures-week1">RUST FUTURES-Week1</h1>
 <h2 id="参考文章">参考文章</h2>
 <p><a href="https://stevenbai.top/rust/futures_explained_in_200_lines_of_rust/#%E8%BF%99%E6%9C%AC%E4%B9%A6%E6%B6%B5%E7%9B%96%E7%9A%84%E5%86%85%E5%AE%B9">200行代码讲透RUST FUTURES</a></p>
 <p><a href="https://course.rs/advance/async/pin-unpin.html#%E5%B0%86%E5%9B%BA%E5%AE%9A%E4%BD%8F%E7%9A%84-future-%E5%8F%98%E4%B8%BA-unpin">RUST圣经</a></p>
 <h2 id="绿色线程green-threads">绿色线程(Green Threads)</h2>
 <h3 id="代码">代码</h3>
 <p>原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> std::ptr;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> std::fmt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">DEFAULT_STACK_SIZE</span>: <span style="color:#66d9ef">usize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1024</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1024</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">MAX_THREADS</span>: <span style="color:#66d9ef">usize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">mut</span> <span style="color:#66d9ef">RUNTIME</span>: <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> Runtime <span style="color:#f92672">=</span> std::ptr::NonNull::dangling().as_ptr();
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Runtime</span> {
-</span></span><span style="display:flex;"><span>    threads: Vec<span style="color:#f92672">&lt;</span>Thread<span style="color:#f92672">&gt;</span>,
-</span></span><span style="display:flex;"><span>    current: <span style="color:#66d9ef">usize</span>,
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> std::fmt::Display <span style="color:#66d9ef">for</span> Runtime {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self, f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> std::fmt::Formatter<span style="color:#f92672">&lt;</span>&#39;_<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">std</span>::fmt::Result {
-</span></span><span style="display:flex;"><span>        write!(f, <span style="color:#e6db74">&#34;Runtime {{ current: {} ;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, self.current);
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (index, my_struct) <span style="color:#66d9ef">in</span> self.threads.iter().enumerate() {
-</span></span><span style="display:flex;"><span>            write!(f, <span style="color:#e6db74">&#34;  {}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, my_struct)<span style="color:#f92672">?</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        write!(f, <span style="color:#e6db74">&#34;}}&#34;</span>)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(PartialEq, Eq, Debug)]</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">State</span> {
-</span></span><span style="display:flex;"><span>    Available,
-</span></span><span style="display:flex;"><span>    Running,
-</span></span><span style="display:flex;"><span>    Ready,
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> fmt::Display <span style="color:#66d9ef">for</span> State {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self, f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> fmt::Formatter<span style="color:#f92672">&lt;</span>&#39;_<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">fmt</span>::Result {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">match</span> self {
-</span></span><span style="display:flex;"><span>            State::Available <span style="color:#f92672">=&gt;</span> write!(f, <span style="color:#e6db74">&#34;Available&#34;</span>),
-</span></span><span style="display:flex;"><span>            State::Running <span style="color:#f92672">=&gt;</span> write!(f, <span style="color:#e6db74">&#34;Running&#34;</span>),
-</span></span><span style="display:flex;"><span>            State::Ready <span style="color:#f92672">=&gt;</span> {
-</span></span><span style="display:flex;"><span>                write!(f, <span style="color:#e6db74">&#34;Ready&#34;</span>)
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Thread</span> {
-</span></span><span style="display:flex;"><span>    id: <span style="color:#66d9ef">usize</span>,
-</span></span><span style="display:flex;"><span>    stack: Vec<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u8</span><span style="color:#f92672">&gt;</span>,
-</span></span><span style="display:flex;"><span>    ctx: <span style="color:#a6e22e">ThreadContext</span>,
-</span></span><span style="display:flex;"><span>    state: <span style="color:#a6e22e">State</span>,
-</span></span><span style="display:flex;"><span>    task: Option<span style="color:#f92672">&lt;</span>Box<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">dyn</span> Fn()<span style="color:#f92672">&gt;&gt;</span>,
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#[derive(Debug, Default)]</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#[repr(C)]</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">ThreadContext</span> {
-</span></span><span style="display:flex;"><span>    rsp: <span style="color:#66d9ef">u64</span>,
-</span></span><span style="display:flex;"><span>    r15: <span style="color:#66d9ef">u64</span>,
-</span></span><span style="display:flex;"><span>    r14: <span style="color:#66d9ef">u64</span>,
-</span></span><span style="display:flex;"><span>    r13: <span style="color:#66d9ef">u64</span>,
-</span></span><span style="display:flex;"><span>    r12: <span style="color:#66d9ef">u64</span>,
-</span></span><span style="display:flex;"><span>    rbx: <span style="color:#66d9ef">u64</span>,
-</span></span><span style="display:flex;"><span>    rbp: <span style="color:#66d9ef">u64</span>,
-</span></span><span style="display:flex;"><span>    thread_ptr: <span style="color:#66d9ef">u64</span>,
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> Thread {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">new</span>(id: <span style="color:#66d9ef">usize</span>) -&gt; <span style="color:#a6e22e">Self</span> {
-</span></span><span style="display:flex;"><span>        Thread {
-</span></span><span style="display:flex;"><span>            id,
-</span></span><span style="display:flex;"><span>            stack: <span style="color:#a6e22e">vec</span><span style="color:#f92672">!</span>[<span style="color:#ae81ff">0_</span><span style="color:#66d9ef">u8</span>; <span style="color:#66d9ef">DEFAULT_STACK_SIZE</span>],
-</span></span><span style="display:flex;"><span>            ctx: <span style="color:#a6e22e">ThreadContext</span>::default(),
-</span></span><span style="display:flex;"><span>            state: <span style="color:#a6e22e">State</span>::Available,
-</span></span><span style="display:flex;"><span>            task: None,
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> std::fmt::Display <span style="color:#66d9ef">for</span> Thread {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self, f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> std::fmt::Formatter<span style="color:#f92672">&lt;</span>&#39;_<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">std</span>::fmt::Result {
-</span></span><span style="display:flex;"><span>        write!(f, <span style="color:#e6db74">&#34;Thread {{id: {},  state: {} ,  ctx: {:?}}}&#34;</span>, self.id,  self.state, self.ctx)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> Runtime {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#[allow(clippy::new_without_default)]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">new</span>() -&gt; <span style="color:#a6e22e">Self</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> base_thread <span style="color:#f92672">=</span> Thread {
-</span></span><span style="display:flex;"><span>            id: <span style="color:#ae81ff">0</span>,
-</span></span><span style="display:flex;"><span>            stack: <span style="color:#a6e22e">vec</span><span style="color:#f92672">!</span>[<span style="color:#ae81ff">0_</span><span style="color:#66d9ef">u8</span>; <span style="color:#66d9ef">DEFAULT_STACK_SIZE</span>],
-</span></span><span style="display:flex;"><span>            ctx: <span style="color:#a6e22e">ThreadContext</span>::default(),
-</span></span><span style="display:flex;"><span>            state: <span style="color:#a6e22e">State</span>::Running,
-</span></span><span style="display:flex;"><span>            task: None,
-</span></span><span style="display:flex;"><span>        };
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> threads <span style="color:#f92672">=</span> vec![base_thread];
-</span></span><span style="display:flex;"><span>        threads[<span style="color:#ae81ff">0</span>].ctx.thread_ptr <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>threads[<span style="color:#ae81ff">0</span>] <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">const</span> Thread <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> available_threads: Vec<span style="color:#f92672">&lt;</span>Thread<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">..</span><span style="color:#66d9ef">MAX_THREADS</span>).map(Thread::new).collect();
-</span></span><span style="display:flex;"><span>        threads.append(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> available_threads);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        Runtime {
-</span></span><span style="display:flex;"><span>            threads,
-</span></span><span style="display:flex;"><span>            current: <span style="color:#ae81ff">0</span>,
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">init</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">unsafe</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> r_ptr: <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> Runtime <span style="color:#f92672">=</span> self;
-</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;RUNTIME has been initialized</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">RUNTIME</span> <span style="color:#f92672">=</span> r_ptr;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">run</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; <span style="color:#f92672">!</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> self.t_yield() {}
-</span></span><span style="display:flex;"><span>        std::process::exit(<span style="color:#ae81ff">0</span>);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">t_return</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self.current <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
-</span></span><span style="display:flex;"><span>            self.threads[self.current].state <span style="color:#f92672">=</span> State::Available;
-</span></span><span style="display:flex;"><span>            self.t_yield();
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">t_yield</span>(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self) -&gt; <span style="color:#66d9ef">bool</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> pos <span style="color:#f92672">=</span> self.current;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> self.threads[pos].state <span style="color:#f92672">!=</span> State::Ready {
-</span></span><span style="display:flex;"><span>            pos <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> pos <span style="color:#f92672">==</span> self.threads.len() {
-</span></span><span style="display:flex;"><span>                pos <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> pos <span style="color:#f92672">==</span> self.current {
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self.threads[self.current].state <span style="color:#f92672">!=</span> State::Available {
-</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;</span>, <span style="color:#f92672">&amp;</span>self);
-</span></span><span style="display:flex;"><span>            self.threads[self.current].state <span style="color:#f92672">=</span> State::Ready;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        self.threads[pos].state <span style="color:#f92672">=</span> State::Running;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> old_pos <span style="color:#f92672">=</span> self.current;
-</span></span><span style="display:flex;"><span>        self.current <span style="color:#f92672">=</span> pos;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        println!(
-</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;[current pos=</span><span style="color:#e6db74">{pos}</span><span style="color:#e6db74"> old_pos=</span><span style="color:#e6db74">{old_pos}</span><span style="color:#e6db74"> len=</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">] switch&#34;</span>,
-</span></span><span style="display:flex;"><span>            self.threads.len()
-</span></span><span style="display:flex;"><span>        );
-</span></span><span style="display:flex;"><span>        println!(
-</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;old.ctx=</span><span style="color:#e6db74">{:p}</span><span style="color:#e6db74"> current.cxt=</span><span style="color:#e6db74">{:p}</span><span style="color:#e6db74">&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&amp;</span>self.threads[old_pos].ctx, <span style="color:#f92672">&amp;</span>self.threads[pos].ctx
-</span></span><span style="display:flex;"><span>        );
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">unsafe</span> {
-</span></span><span style="display:flex;"><span>            __switch(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> self.threads[old_pos].ctx, <span style="color:#f92672">&amp;</span>self.threads[pos].ctx);
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">spawn</span><span style="color:#f92672">&lt;</span>F: Fn() <span style="color:#f92672">+</span> &#39;static<span style="color:#f92672">&gt;</span>(f: <span style="color:#a6e22e">F</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">unsafe</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> rt_ptr <span style="color:#f92672">=</span> <span style="color:#66d9ef">RUNTIME</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> available <span style="color:#f92672">=</span> (<span style="color:#f92672">*</span>rt_ptr)
-</span></span><span style="display:flex;"><span>                .threads
-</span></span><span style="display:flex;"><span>                .iter_mut()
-</span></span><span style="display:flex;"><span>                .find(<span style="color:#f92672">|</span>t<span style="color:#f92672">|</span> t.state <span style="color:#f92672">==</span> State::Available)
-</span></span><span style="display:flex;"><span>                .expect(<span style="color:#e6db74">&#34;no available thread.&#34;</span>);
-</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;spawn use RUNTIME to find available thread&#34;</span>);
-</span></span><span style="display:flex;"><span>            
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> size <span style="color:#f92672">=</span> available.stack.len();
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> s_ptr <span style="color:#f92672">=</span> available.stack.as_mut_ptr();
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> s_ptr <span style="color:#f92672">=</span> s_ptr.add(size);
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> s_ptr <span style="color:#f92672">=</span> s_ptr <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span> <span style="color:#f92672">&amp;</span> <span style="color:#f92672">!</span><span style="color:#ae81ff">0xf</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">let</span> s_ptr <span style="color:#f92672">=</span> s_ptr <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> <span style="color:#66d9ef">u8</span>;
-</span></span><span style="display:flex;"><span>            
-</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 这俩都得对齐
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            ptr::write_unaligned(s_ptr.sub(<span style="color:#ae81ff">16</span>).cast::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u64</span><span style="color:#f92672">&gt;</span>(), guard <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">usize</span> <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>);
-</span></span><span style="display:flex;"><span>            ptr::write_unaligned(s_ptr.sub(<span style="color:#ae81ff">32</span>) <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> <span style="color:#66d9ef">u64</span>, __call <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">usize</span> <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>);
-</span></span><span style="display:flex;"><span>            available.ctx.rsp <span style="color:#f92672">=</span> s_ptr.sub(<span style="color:#ae81ff">32</span>) <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>;
-</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;available.ctx.rsp = </span><span style="color:#e6db74">{:x}</span><span style="color:#e6db74">&#34;</span>, available.ctx.rsp);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            available.task <span style="color:#f92672">=</span> Some(Box::new(f));
-</span></span><span style="display:flex;"><span>            available.ctx.thread_ptr <span style="color:#f92672">=</span> available <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">const</span> Thread <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">u64</span>;
-</span></span><span style="display:flex;"><span>            available.state <span style="color:#f92672">=</span> State::Ready;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 因为guard是对齐的，这里ret的时候rsp也得对齐
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 这个用rust好像做不了吧
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">call</span>(thread: <span style="color:#66d9ef">u64</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> thread <span style="color:#f92672">=</span> <span style="color:#66d9ef">unsafe</span> { <span style="color:#f92672">&amp;*</span>(thread <span style="color:#66d9ef">as</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">const</span> Thread) };
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> Some(f) <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>thread.task {
-</span></span><span style="display:flex;"><span>        f();
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>std::arch::global_asm!(
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;.globl __call&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;__call:&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  fn call(thread: u64) {
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   subq    $0x28, %rsp&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movq    %rdi, 0x10(%rsp)&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  let thread = unsafe { &amp;*(thread as *const Thread) };
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   movq    %rdi, 0x18(%rsp)&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  if let Some(f) = &amp;thread.task {
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   movq    %rdi, %rax&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   addq    $0x60, %rax&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movq    %rax, 0x8(%rsp)&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movq    0x60(%rdi), %rdx&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movl    $0x1, %eax&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   xorl    %ecx, %ecx&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   cmpq    $0x0, %rdx&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   cmoveq  %rcx, %rax&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   cmpq    $0x1, %rax&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   jne     0f&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   movq    0x8(%rsp), %rdi&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//     if let Some(f) = &amp;thread.task {
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   movq    %rdi, 0x20(%rsp)&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//         f();
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   movq   8(%rdi), %rdi&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   callq   *0x28(%rdi)&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// }
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;0: addq    $0x28, %rsp&#34;</span>,
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 没错，这里要再加一个8，这样retq使用的就是栈中的那个guard
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#e6db74">&#34;   addq    $8, %rsp&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;   retq&#34;</span>,
-</span></span><span style="display:flex;"><span>    options(att_syntax)
-</span></span><span style="display:flex;"><span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">guard</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsafe</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> rt_ptr <span style="color:#f92672">=</span> <span style="color:#66d9ef">RUNTIME</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> rt <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> <span style="color:#f92672">*</span>rt_ptr;
-</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;THREAD </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> FINISHED.&#34;</span>, rt.threads[rt.current].id);
-</span></span><span style="display:flex;"><span>        rt.t_return();
-</span></span><span style="display:flex;"><span>    };
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">yield_thread</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsafe</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> rt_ptr <span style="color:#f92672">=</span> <span style="color:#66d9ef">RUNTIME</span>;
-</span></span><span style="display:flex;"><span>        (<span style="color:#f92672">*</span>rt_ptr).t_yield();
-</span></span><span style="display:flex;"><span>    };
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>std::arch::global_asm!(
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">r</span><span style="color:#e6db74">#&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.globl __switch
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">__switch:
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x00], rsp
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x08], r15
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x10], r14
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x18], r13
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x20], r12
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x28], rbx
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  [rdi+0x30], rbp
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  rsp, [rsi+0x00]
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  r15, [rsi+0x08]
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  r14, [rsi+0x10]
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  r13, [rsi+0x18]
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  r12, [rsi+0x20]
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  rbx, [rsi+0x28]
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  rbp, [rsi+0x30]
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  mov  rdi, [rsi+0x38]
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  ret
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;#</span>
-</span></span><span style="display:flex;"><span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">__switch</span>(old: <span style="color:#f92672">*</span><span style="color:#66d9ef">mut</span> ThreadContext, new: <span style="color:#f92672">*</span><span style="color:#66d9ef">const</span> ThreadContext);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">__call</span>(thread: <span style="color:#66d9ef">u64</span>);
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#[cfg(not(windows))]</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> runtime <span style="color:#f92672">=</span> Runtime::new();
-</span></span><span style="display:flex;"><span>    runtime.init();
-</span></span><span style="display:flex;"><span>    Runtime::spawn(<span style="color:#f92672">||</span> {
-</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;I haven&#39;t implemented a timer in this example.&#34;</span>);
-</span></span><span style="display:flex;"><span>        yield_thread();
-</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;Finally, notice how the tasks are executed concurrently.&#34;</span>);
-</span></span><span style="display:flex;"><span>    });
-</span></span><span style="display:flex;"><span>    Runtime::spawn(<span style="color:#f92672">||</span> {
-</span></span><span style="display:flex;"><span>        println!(<span style="color:#e6db74">&#34;But we can still nest tasks...&#34;</span>);
-</span></span><span style="display:flex;"><span>        Runtime::spawn(<span style="color:#f92672">||</span> {
-</span></span><span style="display:flex;"><span>            println!(<span style="color:#e6db74">&#34;...like this!&#34;</span>);
-</span></span><span style="display:flex;"><span>        })
-</span></span><span style="display:flex;"><span>    });
-</span></span><span style="display:flex;"><span>    runtime.run();
-</span></span><span style="display:flex;"><span>    println!(<span style="color:#e6db74">&#34;Hello, world!&#34;</span>);
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>都是佬们写的，我只是个搬运工，之前有个<code>ctx</code>没对齐导致打印<code>ctx</code>时会出现<code>segment fault</code>，现已解决，大家可放心食用。</p>
+<p><a href="../green_thread.rs">green threads.rs</a></p>
+<p>都是佬们写的，我只是个搬运工，之前有个<code>ctx</code>没对齐导致打印<code>ctx</code>时会出现<code>segment fault</code>，现已解决，大家可放心食用。</p>
 <h2 id="基于回调">基于回调</h2>
 <p>基于回调的方法在编程中是一种常见的模式，尤其在处理异步操作时经常会用到。虽然在 JavaScript 中的回调地狱让人头痛，但在其他语言中，特别是像 Rust 这样的系统编程语言中，可以更好地管理回调。</p>
 <p>在 Rust 中，基于回调的方法通常通过闭包来实现。闭包是一种可以捕获其周围环境并在稍后执行的匿名函数。下面是一个简单的例子，展示了如何在 Rust 中使用基于回调的方法：</p>
@@ -473,7 +193,7 @@ Promises 有三种状态：<code>pending</code> （进行中）、<code>fulfille
 <li>若在当前 <code>poll</code> 中， <code>Future</code> 可以被完成，则会返回 <code>Poll::Ready(result)</code> ，反之则返回 <code>Poll::Pending</code>， 并且安排一个 <code>wake</code> 函数：</li>
 <li>当未来 <code>Future</code> 准备好进一步执行时， 该函数会被调用，然后将该 <code>Future</code> 送入 <strong>消息管道</strong> ，执行器从 <strong>消息管道</strong> 拉取 <code>Future</code>, 再次调用 <code>poll</code> 方法，此时 <code>Future</code> 就可以继续执行了。(进入步骤2)</li>
 </ol>
-<p><img src="image.png" alt="alt text"></p>
+<p><img src="../image.png" alt="alt text"></p>
 <h3 id="关于-pin-和-unpin-的理解">关于 <code>Pin</code> 和 <code>Unpin</code> 的理解</h3>
 <h4 id="官方内容">官方内容：</h4>
 <p>将固定住的 <code>Future</code> 变为 <code>Unpin</code>
