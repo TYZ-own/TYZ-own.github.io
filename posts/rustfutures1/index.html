@@ -20,6 +20,7 @@
   <meta name="twitter:title" content="RustFutures">
   <meta name="twitter:description" content="RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES
 RUST圣经
+关于进程、线程与协程 假设你坐在一个位置上，桌子上摆满了你的书。进程切换就是你在这个位置上学习，然后别人也要来这个位置上学习，你要走了，所以你得把桌子上的书都清走；线程切换是你不看这本书了，转去看另一本书；协程切换就是你翻到某一页，感觉有些词汇不熟悉，就翻到了另外一页，等你忽然记起来这个词汇了，你就又翻了回去。在这个过程中，开销越来越小，效率越来越高。
 绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：
 green threads.rs
 都是佬们写的，我只是个搬运工，之前有个ctx没对齐导致打印ctx时会出现segment fault，现已解决，大家可放心食用。
@@ -32,6 +33,7 @@ use std::collections::HashMap; // 定义一个保存回调函数的HashMap // �
   <meta property="og:title" content="RustFutures">
   <meta property="og:description" content="RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES
 RUST圣经
+关于进程、线程与协程 假设你坐在一个位置上，桌子上摆满了你的书。进程切换就是你在这个位置上学习，然后别人也要来这个位置上学习，你要走了，所以你得把桌子上的书都清走；线程切换是你不看这本书了，转去看另一本书；协程切换就是你翻到某一页，感觉有些词汇不熟悉，就翻到了另外一页，等你忽然记起来这个词汇了，你就又翻了回去。在这个过程中，开销越来越小，效率越来越高。
 绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：
 green threads.rs
 都是佬们写的，我只是个搬运工，之前有个ctx没对齐导致打印ctx时会出现segment fault，现已解决，大家可放心食用。
@@ -85,7 +87,7 @@ use std::collections::HashMap; // 定义一个保存回调函数的HashMap // �
   <title>clock</title>
   <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
 </svg>
-          2 min read
+          3 min read
         </div>
         <div>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tag">
@@ -102,6 +104,8 @@ use std::collections::HashMap; // 定义一个保存回调函数的HashMap // �
 <h2 id="参考文章">参考文章</h2>
 <p><a href="https://stevenbai.top/rust/futures_explained_in_200_lines_of_rust/#%E8%BF%99%E6%9C%AC%E4%B9%A6%E6%B6%B5%E7%9B%96%E7%9A%84%E5%86%85%E5%AE%B9">200行代码讲透RUST FUTURES</a></p>
 <p><a href="https://course.rs/advance/async/pin-unpin.html#%E5%B0%86%E5%9B%BA%E5%AE%9A%E4%BD%8F%E7%9A%84-future-%E5%8F%98%E4%B8%BA-unpin">RUST圣经</a></p>
+<h2 id="关于进程线程与协程">关于进程、线程与协程</h2>
+<p>假设你坐在一个位置上，桌子上摆满了你的书。进程切换就是你在这个位置上学习，然后别人也要来这个位置上学习，你要走了，所以你得把桌子上的书都清走；线程切换是你不看这本书了，转去看另一本书；协程切换就是你翻到某一页，感觉有些词汇不熟悉，就翻到了另外一页，等你忽然记起来这个词汇了，你就又翻了回去。在这个过程中，开销越来越小，效率越来越高。</p>
 <h2 id="绿色线程green-threads">绿色线程(Green Threads)</h2>
 <h3 id="代码">代码</h3>
 <p>原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：</p>
@@ -195,9 +199,8 @@ Promises 有三种状态：<code>pending</code> （进行中）、<code>fulfille
 </ol>
 <p><img src="../image.png" alt="alt text"></p>
 <h3 id="关于-pin-和-unpin-的理解">关于 <code>Pin</code> 和 <code>Unpin</code> 的理解</h3>
-<h4 id="官方内容">官方内容：</h4>
-<p>将固定住的 <code>Future</code> 变为 <code>Unpin</code>
-之前的章节我们有提到 <code>async</code> 函数返回的 <code>Future</code> 默认就是 <code>!Unpin</code> 的。</p>
+<h4 id="将固定住的-future-变为-unpin">将固定住的 <code>Future</code> 变为 <code>Unpin</code></h4>
+<p>之前的章节我们有提到 <code>async</code> 函数返回的 <code>Future</code> 默认就是 <code>!Unpin</code> 的。</p>
 <p>但是，在实际应用中，一些函数会要求它们处理的 <code>Future</code> 是 <code>Unpin</code> 的，此时，若你使用的 <code>Future</code> 是 <code>!Unpin</code> 的，必须要使用以下的方法先将 <code>Future</code> 进行固定:</p>
 <p><code>Box::pin</code>， 创建一个 <code>Pin&lt;Box&lt;T&gt;&gt;</code>
 <code>pin_utils::pin_mut!</code>， 创建一个 <code>Pin&lt;&amp;mut T&gt;</code>
@@ -222,6 +225,28 @@ Promises 有三种状态：<code>pending</code> （进行中）、<code>fulfille
 </span></span><span style="display:flex;"><span>execute_unpin_future(fut); <span style="color:#75715e">// OK
 </span></span></span></code></pre></div><h4 id="个人理解">个人理解：</h4>
 <p>在这里，<code>Pin</code> 是一个包装着 <strong>不可移动类型的指针</strong> ( eg: <code>Box</code>) 的类型 ，被 <code>Pin</code> 中指针包装的类型不能被移动， 但 <code>Pin</code> 的指针可以被移动和使用。</p>
+<h4 id="pin-和-unpin"><code>Pin</code> 和 <code>Unpin</code></h4>
+<ol>
+<li><code>Pin</code> 是一个结构体：</li>
+</ol>
+<pre tabindex="0"><code>pub struct Pin&lt;P&gt; {
+    pointer: P,
+}
+</code></pre><p>它包裹一个指针，并且能确保该指针指向的数据不会被移动，例如 <code>Pin&lt;&amp;mut T&gt;</code> , <code>Pin&lt;&amp;T&gt;</code> , <code>Pin&lt;Box&lt;T&gt;&gt;</code> ，都能确保 <code>T</code> 不会被移动。</p>
+<ol start="2">
+<li>
+<p><code>Unpin</code> 是一个特征，它表明一个类型可以随意被移动;</p>
+</li>
+<li>
+<p>可以被 <code>Pin</code> 住的值实现的特征是 <code>!Unpin</code>;</p>
+</li>
+<li>
+<p>实现了 <code>Unpin</code> 特征，依旧可以 <code>Pin</code>，毕竟它只是一个结构体，你可以随意使用， <strong>但是不再有任何效果而已， 该值一样可以被移动</strong> ！</p>
+</li>
+<li>
+<p>一个类型如果不能被移动，它必须实现 <code>!Unpin</code> 特征。</p>
+</li>
+</ol>
 
     </div>
     <div class="post-footer">
