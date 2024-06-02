@@ -6,21 +6,21 @@
     <description>Recent content on TYZ</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 May 2024 15:29:49 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 02 Jun 2024 16:43:16 +0800</lastBuildDate>
     <atom:link href="https://tyz-own.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RustFutures(2)</title>
+      <link>https://tyz-own.github.io/posts/rustfutures2/</link>
+      <pubDate>Sun, 02 Jun 2024 16:43:16 +0800</pubDate>
+      <guid>https://tyz-own.github.io/posts/rustfutures2/</guid>
+      <description>week2 阅读文章： Embassy中文文档&#xA;基于rcore的串口异步驱动（还没运行好）&#xA;Async Rust vs RTOS 一决雌雄(原文在链接里面也有，挺有意思的)&#xA;这几个都是杨凯豪-lighkLife同学的github仓库的链接，感觉总结的很好，在这儿备个份。&#xA;异步、同步、阻塞、非阻塞 从Linux read()系统调用出发 无论是shell脚本编写者还是C语言开发者，在Linux平台上进行开发/运维工作肯定经常用read()这一方法，read()方法是linux的系统调用，在内核中真正处理它的是sys_read()方法，sys_read()是read系统调用的内核入口（详见此博客）。&#xA;那么用户进程在调用read()时发生了什么？如何区分这一调用是阻塞or非阻塞？又怎么区分用户进程与内核的通信是同步or异步？ 下图： 图比较丑，但应该很清晰了。应用进程调用read()方法后，陷入0x80中断，此时如果用户进程挂起等待中断返回，说明这次调用时阻塞的；若马上继续执行后面的代码就是非阻塞的。在linux内核态中，数据需要从网络或者磁盘文件上读出并首先拷贝到内核的虚拟内存空间，然后再从内核的虚存空间拷贝到用户进程的虚存空间。在这一过程中，用户进程可能已经在执行数据处理的代码段，其有两种选择：&#xA;1）不断轮询内核数据是否已经完成（内核虚存空间-&amp;gt;用户进程虚存空间）的拷贝过程；&#xA;2）直接开始处理数据或执行其它后续逻辑。&#xA;这里 (1) 就对应进程和内核之间的同步通信，(2) 则对应异步通信。多说一句，明显同步通信的代价很高，用户进程在轮询（例如while语句）内核，此时系统频繁地在用户态和内核态之间切换，上下文的开销是不容忽视的。当然，linux内核有”IO多路复用“这样的设计来优化这种轮询机制，但优化之后本质上还是同步轮询。&#xA;以上内容摘自 浅谈阻塞/非阻塞、同步/异步&#xA;利用协程进行异步系统调用 那么如何利用协程进行异步系统调用呢？&#xA;利用协程（如Rust中的异步函数）实现异步系统调用，可以通过tokio这样的异步运行时库。以下是一个具体的示例，展示如何利用Rust的tokio库和异步编程模型，实现异步的文件读取操作，这是一种典型的异步系统调用。&#xA;环境设置 首先，在你的Cargo.toml文件中添加tokio依赖：&#xA;[dependencies] tokio = { version = &amp;#34;1&amp;#34;, features = [&amp;#34;full&amp;#34;] } 代码部分： 通过协程进行异步调用&#xA;输出结果：</description>
+    </item>
     <item>
       <title>RustFutures</title>
       <link>https://tyz-own.github.io/posts/rustfutures1/</link>
       <pubDate>Fri, 24 May 2024 15:29:49 +0800</pubDate>
       <guid>https://tyz-own.github.io/posts/rustfutures1/</guid>
       <description>RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES&#xA;RUST圣经&#xA;关于进程、线程与协程 假设你坐在一个位置上，桌子上摆满了你的书。进程切换就是你在这个位置上学习，然后别人也要来这个位置上学习，你要走了，所以你得把桌子上的书都清走；线程切换是你不看这本书了，转去看另一本书；协程切换就是你翻到某一页，感觉有些词汇不熟悉，就翻到了另外一页，等你忽然记起来这个词汇了，你就又翻了回去。在这个过程中，开销越来越小，效率越来越高。&#xA;绿色线程(Green Threads) 代码 原文档的green threads可能因为版本问题已经不能编译通过了，这是修改后的：&#xA;green threads.rs&#xA;都是佬们写的，我只是个搬运工，之前有个ctx没对齐导致打印ctx时会出现segment fault，现已解决，大家可放心食用。&#xA;基于回调 基于回调的方法在编程中是一种常见的模式，尤其在处理异步操作时经常会用到。虽然在 JavaScript 中的回调地狱让人头痛，但在其他语言中，特别是像 Rust 这样的系统编程语言中，可以更好地管理回调。&#xA;在 Rust 中，基于回调的方法通常通过闭包来实现。闭包是一种可以捕获其周围环境并在稍后执行的匿名函数。下面是一个简单的例子，展示了如何在 Rust 中使用基于回调的方法：&#xA;use std::collections::HashMap; // 定义一个保存回调函数的HashMap // 键是字符串，值是一个闭包，它接受一个 i32 参数并返回一个 i32 // 这个闭包可以代表任何需要在以后执行的任务 let mut callbacks: HashMap&amp;lt;String, Box&amp;lt;dyn Fn(i32) -&amp;gt; i32&amp;gt;&amp;gt; = HashMap::new(); // 添加一个回调函数到 HashMap 中 callbacks.insert(&amp;#34;double&amp;#34;.to_string(), Box::new(|x| x * 2)); // 定义一个函数，它接受一个回调函数的名称和一个参数，然后调用相应的回调函数 fn call_callback(callback_name: &amp;amp;str, value: i32, callbacks: &amp;amp;HashMap&amp;lt;String, Box&amp;lt;dyn Fn(i32) -&amp;gt; i32&amp;gt;&amp;gt;) -&amp;gt; Option&amp;lt;i32&amp;gt; { if let Some(callback) = callbacks.</description>
-    </item>
-    <item>
-      <title>Pin? Unpin?</title>
-      <link>https://tyz-own.github.io/posts/pinunpin/</link>
-      <pubDate>Thu, 23 May 2024 21:13:45 +0800</pubDate>
-      <guid>https://tyz-own.github.io/posts/pinunpin/</guid>
-      <description>gpt 解释： 在 Rust 中，Pin&amp;lt;Box&amp;lt;T&amp;gt;&amp;gt; 和 Pin&amp;lt;&amp;amp;mut T&amp;gt; 类型的实例可以用于异步编程中的 Future。这是因为在异步编程中，通常需要确保将异步任务钉住（pin）在内存中，以防止其移动。而 Pin 类型就是为了实现这种钉住的功能而设计的。&#xA;同时，这两种类型的实例会自动实现 Unpin trait 。Unpin trait 是 Rust 中的一个特殊 trait，它标识了类型在异步上下文中可以安全地被移动。因为 Pin 类型的实例在钉住后不能移动，所以它们的实例默认是不可移动的，因此自动实现了 Unpin trait。&#xA;这意味着，尽管在异步上下文中使用了 Pin 类型的实例，但由于它们自动实现了 Unpin trait，所以在必要时，编译器会自动为它们生成合适的代码，以确保它们在异步任务中的移动是安全的。这简化了异步编程中的类型处理，并提供了更好的类型安全性。&#xA;个人理解： 以下内容摘自RUST圣经：&#xA;将固定住的 Future 变为 Unpin 之前的章节我们有提到 async 函数返回的 Future 默认就是 !Unpin 的。&#xA;但是，在实际应用中，一些函数会要求它们处理的 Future 是 Unpin 的，此时，若你使用的 Future 是 !Unpin 的，必须要使用以下的方法先将 Future 进行固定:&#xA;Box::pin， 创建一个 Pin&amp;lt;Box&amp;lt;T&amp;gt;&amp;gt; pin_utils::pin_mut!， 创建一个 Pin&amp;lt;&amp;amp;mut T&amp;gt; 固定后获得的 Pin&amp;lt;Box&amp;lt;T&amp;gt;&amp;gt; 和 Pin&amp;lt;&amp;amp;mut T&amp;gt; 既可以用于 Future ，又会自动实现 Unpin。</description>
     </item>
   </channel>
 </rss>
