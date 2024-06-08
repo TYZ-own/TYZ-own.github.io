@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Reqwest on TYZ</title>
-    <link>http://localhost:1313/tags/reqwest/</link>
+    <link>https://tyz-own.github.io/tags/reqwest/</link>
     <description>Recent content in Reqwest on TYZ</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 08 Jun 2024 12:01:49 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/reqwest/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://tyz-own.github.io/tags/reqwest/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Some_fault</title>
-      <link>http://localhost:1313/posts/some_fault/</link>
+      <link>https://tyz-own.github.io/posts/some_fault/</link>
       <pubDate>Sat, 08 Jun 2024 12:01:49 +0800</pubDate>
-      <guid>http://localhost:1313/posts/some_fault/</guid>
+      <guid>https://tyz-own.github.io/posts/some_fault/</guid>
       <description>some falut 参考文章 为什么即使在本地安装后，rust 也无法为 openssl-sys v0.9.60 构建命令？&#xA;rust爬虫示例&#xA;rust爬虫时使用库时编译不成功 源码链接：爬虫代码&#xA;依赖如下&#xA;[dependencies] reqwest = &amp;#34;0.11.23&amp;#34; scraper = &amp;#34;0.18.1&amp;#34; tokio = { version = &amp;#34;1.35.1&amp;#34;, features = [&amp;#34;full&amp;#34;] } 进行编译&#xA;cargo build 产生错误信息： 主要是reqwest crate的锅。&#xA;解决方案 在ubuntu下的解决方案（因为本人的是ubuntu，只能测试这个）：&#xA;sudo apt install libssl-dev 其它系统下的解决方案或其它相关问题可以参考这个提问的相关解答：为什么即使在本地安装后，rust 也无法为 openssl-sys v0.9.60 构建命令？</description>
     </item>
   </channel>
