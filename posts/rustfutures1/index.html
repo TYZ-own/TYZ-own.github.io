@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en-us">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <title>RustFutures // TYZ</title>
     <link rel="shortcut icon" href="/T.png" />
     <meta charset="utf-8" />
@@ -28,7 +28,7 @@ green threads.rs
 在 Rust 中，基于回调的方法通常通过闭包来实现。闭包是一种可以捕获其周围环境并在稍后执行的匿名函数。下面是一个简单的例子，展示了如何在 Rust 中使用基于回调的方法：
 use std::collections::HashMap; // 定义一个保存回调函数的HashMap // 键是字符串，值是一个闭包，它接受一个 i32 参数并返回一个 i32 // 这个闭包可以代表任何需要在以后执行的任务 let mut callbacks: HashMap&lt;String, Box&lt;dyn Fn(i32) -&gt; i32&gt;&gt; = HashMap::new(); // 添加一个回调函数到 HashMap 中 callbacks.insert(&#34;double&#34;.to_string(), Box::new(|x| x * 2)); // 定义一个函数，它接受一个回调函数的名称和一个参数，然后调用相应的回调函数 fn call_callback(callback_name: &amp;str, value: i32, callbacks: &amp;HashMap&lt;String, Box&lt;dyn Fn(i32) -&gt; i32&gt;&gt;) -&gt; Option&lt;i32&gt; { if let Some(callback) = callbacks.">
 
-    <meta property="og:url" content="https://tyz-own.github.io/posts/rustfutures1/">
+    <meta property="og:url" content="http://localhost:1313/posts/rustfutures1/">
   <meta property="og:site_name" content="TYZ">
   <meta property="og:title" content="RustFutures">
   <meta property="og:description" content="RUST FUTURES-Week1 参考文章 200行代码讲透RUST FUTURES
@@ -52,7 +52,7 @@ use std::collections::HashMap; // 定义一个保存回调函数的HashMap // �
   </head>
   <body>
     <header class="app-header">
-      <a href="https://tyz-own.github.io/"><img class="app-header-avatar" src="/Tyz.jpg" alt="Tyz" /></a>
+      <a href="http://localhost:1313/"><img class="app-header-avatar" src="/Tyz.jpg" alt="Tyz" /></a>
       <span class="app-header-title">TYZ</span>
       <nav class="app-header-menu">
           <a class="app-header-menu-item" href="/tags/">Tags</a>
@@ -94,8 +94,8 @@ use std::collections::HashMap; // 定义一个保存回调函数的HashMap // �
   <title>tag</title>
   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
 </svg>
-              <a class="tag" href="https://tyz-own.github.io/tags/rust/">Rust</a>
-              <a class="tag" href="https://tyz-own.github.io/tags/os/">Os</a>
+              <a class="tag" href="http://localhost:1313/tags/rust/">Rust</a>
+              <a class="tag" href="http://localhost:1313/tags/os/">Os</a>
         </div>
       </div>
     </header>

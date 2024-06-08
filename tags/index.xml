@@ -2,24 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on TYZ</title>
-    <link>https://tyz-own.github.io/tags/</link>
+    <link>http://localhost:1313/tags/</link>
     <description>Recent content in Tags on TYZ</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 May 2024 15:29:49 +0800</lastBuildDate>
-    <atom:link href="https://tyz-own.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 08 Jun 2024 12:01:49 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Os</title>
-      <link>https://tyz-own.github.io/tags/os/</link>
+      <title>Reqwest</title>
+      <link>http://localhost:1313/tags/reqwest/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://tyz-own.github.io/tags/os/</guid>
+      <guid>http://localhost:1313/tags/reqwest/</guid>
       <description></description>
     </item>
     <item>
       <title>Rust</title>
-      <link>https://tyz-own.github.io/tags/rust/</link>
+      <link>http://localhost:1313/tags/rust/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://tyz-own.github.io/tags/rust/</guid>
+      <guid>http://localhost:1313/tags/rust/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Os</title>
+      <link>http://localhost:1313/tags/os/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tags/os/</guid>
       <description></description>
     </item>
   </channel>
