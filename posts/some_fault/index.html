@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Some_fault // TYZ</title>
+    <link rel="shortcut icon" href="/T.png" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.127.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Tyz" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.e3e1b5ef4f19ce0b945b72db9c1b0f8695f2e58150b28a19816fb99686c92549.css" />
+    
+
+    
+  
+
+
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Some_fault">
+  <meta name="twitter:description" content="some falut 参考文章 为什么即使在本地安装后，rust 也无法为 openssl-sys v0.9.60 构建命令？
+rust爬虫示例
+rust爬虫时使用库时编译不成功 源码链接：爬虫代码
+依赖如下
+[dependencies] reqwest = &#34;0.11.23&#34; scraper = &#34;0.18.1&#34; tokio = { version = &#34;1.35.1&#34;, features = [&#34;full&#34;] } 进行编译
+cargo build 产生错误信息： 主要是reqwest crate的锅。
+解决方案 在ubuntu下的解决方案（因为本人的是ubuntu，只能测试这个）：
+sudo apt install libssl-dev 其它系统下的解决方案或其它相关问题可以参考这个提问的相关解答：为什么即使在本地安装后，rust 也无法为 openssl-sys v0.9.60 构建命令？">
+
+    <meta property="og:url" content="https://tyz-own.github.io/posts/some_fault/">
+  <meta property="og:site_name" content="TYZ">
+  <meta property="og:title" content="Some_fault">
+  <meta property="og:description" content="some falut 参考文章 为什么即使在本地安装后，rust 也无法为 openssl-sys v0.9.60 构建命令？
+rust爬虫示例
+rust爬虫时使用库时编译不成功 源码链接：爬虫代码
+依赖如下
+[dependencies] reqwest = &#34;0.11.23&#34; scraper = &#34;0.18.1&#34; tokio = { version = &#34;1.35.1&#34;, features = [&#34;full&#34;] } 进行编译
+cargo build 产生错误信息： 主要是reqwest crate的锅。
+解决方案 在ubuntu下的解决方案（因为本人的是ubuntu，只能测试这个）：
+sudo apt install libssl-dev 其它系统下的解决方案或其它相关问题可以参考这个提问的相关解答：为什么即使在本地安装后，rust 也无法为 openssl-sys v0.9.60 构建命令？">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-06-08T12:01:49+08:00">
+    <meta property="article:modified_time" content="2024-06-08T12:01:49+08:00">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://tyz-own.github.io/"><img class="app-header-avatar" src="/Tyz.jpg" alt="Tyz" /></a>
+      <span class="app-header-title">TYZ</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/tags/">Tags</a>
+      </nav>
+      <p>Tyz&#39;s Blog</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/tyz-own" target="_blank" rel="noreferrer noopener me">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>My Github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Some_fault</h1>
+      <div class="post-meta">
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Jun 8, 2024
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          1 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="some-falut">some falut</h1>
+<h2 id="参考文章">参考文章</h2>
+<p><a href="https://stackoverflow.com/questions/65553557/why-rust-is-failing-to-build-command-for-openssl-sys-v0-9-60-even-after-local-in">为什么即使在本地安装后，rust 也无法为 openssl-sys v0.9.60 构建命令？</a></p>
+<p><a href="https://youerning.top/post/rust/rust-simple-scraper/">rust爬虫示例</a></p>
+<h2 id="rust爬虫时使用库时编译不成功">rust爬虫时使用库时编译不成功</h2>
+<p>源码链接：<a href="../crawler.rs">爬虫代码</a></p>
+<p>依赖如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>[dependencies]
+</span></span><span style="display:flex;"><span>reqwest <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;0.11.23&#34;</span>
+</span></span><span style="display:flex;"><span>scraper <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;0.18.1&#34;</span>
+</span></span><span style="display:flex;"><span>tokio <span style="color:#f92672">=</span> { version <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1.35.1&#34;</span>, features <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;full&#34;</span>] }
+</span></span></code></pre></div><p>进行编译</p>
+<pre tabindex="0"><code>cargo build
+</code></pre><p>产生错误信息：
+<img src="../default_crawler.png" alt="alt text"></p>
+<p>主要是<code>reqwest crate</code>的锅。</p>
+<h3 id="解决方案">解决方案</h3>
+<p>在ubuntu下的解决方案（因为本人的是ubuntu，只能测试这个）：</p>
+<pre tabindex="0"><code class="language-ubuntu" data-lang="ubuntu">sudo apt install libssl-dev
+</code></pre><p>其它系统下的解决方案或其它相关问题可以参考这个提问的相关解答：<a href="https://stackoverflow.com/questions/65553557/why-rust-is-failing-to-build-command-for-openssl-sys-v0-9-60-even-after-local-in">为什么即使在本地安装后，rust 也无法为 openssl-sys v0.9.60 构建命令？</a></p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
